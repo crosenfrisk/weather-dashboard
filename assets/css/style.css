@@ -1,0 +1,58 @@
+body{
+    margin: 10px;
+    padding: 10px;
+}
+
+header h1{
+    background-image: linear-gradient(to right, rgb(121, 151, 250), rgb(9, 9, 49));
+    color: white;
+    text-align: center;
+    }
+
+/* #Left-Column{;
+} */
+
+#Left-Column input{
+    width: 100%;  
+}
+
+#submitBtn{
+    background-color: rgb(121, 151, 250);
+    border:cornflowerblue;
+    color: white;
+    margin-top: 5px;
+    width: 100%;
+    }
+
+    .line{
+        border-bottom: grey solid 1px;
+        padding: 5px;
+        margin-bottom: 5px;
+    }
+
+    #Search-History .button {
+        justify-content: left;
+        background: rgb(182, 181, 181);
+        border: none;
+        color: black;
+        margin-top: 5px;
+        text-align: center;
+        width:100%;
+    }
+
+    #Right-Column {
+        margin-top: 5px;
+    }
+    #Current-City {
+        border:black 1px solid;
+    }
+
+    h4{
+        margin-top: 5px;
+    }
+   .dayBox {
+       background:rgb(93, 93, 121);
+       border:black 1px solid;
+       color: white;
+       margin: 5px;
+    }
