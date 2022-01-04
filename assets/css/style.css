@@ -9,9 +9,6 @@ header h1{
     text-align: center;
     }
 
-/* #Left-Column{;
-} */
-
 #textfield {
     width: 100%;  
 }
@@ -43,13 +40,20 @@ header h1{
     #Right-Column {
         margin-top: 5px;
     }
+
     #Current-City {
         border:black 1px solid;
+    }
+
+    #Right-Column p {
+        margin-top: 5px;
+        font-weight: normal;
     }
 
     h4{
         margin-top: 5px;
     }
+
    .dayBox {
        background:rgb(93, 93, 121);
        border:black 1px solid;
