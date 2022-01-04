@@ -54,6 +54,18 @@ header h1{
         margin-top: 5px;
     }
 
+    .favorable {
+        background-color: green;
+    }
+
+    .moderate {
+        background-color: orange;
+    }
+
+    .severe {
+        background-color: red;
+    }
+
    .dayBox {
        background:rgb(93, 93, 121);
        border:black 1px solid;
