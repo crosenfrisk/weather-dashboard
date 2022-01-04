@@ -12,11 +12,11 @@ header h1{
 /* #Left-Column{;
 } */
 
-#Left-Column input{
+#textfield {
     width: 100%;  
 }
 
-#submitBtn{
+.btnSubmit{
     background-color: rgb(121, 151, 250);
     border:cornflowerblue;
     color: white;
