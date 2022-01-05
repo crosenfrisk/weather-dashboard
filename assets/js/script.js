@@ -1,7 +1,6 @@
 var userFormEl = document.querySelector("#user-form");
 var cityInputEl = document.querySelector("#textfield");
-var currentCityName = cityInputEl.value.trim();
-
+// var currentCityName = '';
 // When a user types in a city in form input, API generates "Current City" on right side of screen; search also gets added to search history.
 
 var formSubmitHandler = function (event) {
@@ -11,6 +10,7 @@ var formSubmitHandler = function (event) {
 
   if (currentCityName) {
     getWeather(currentCityName);
+    saveInput();
     // fiveDayForecast(currentCityName);
     cityInputEl.value = "";
   } else if (!currentCityName === false) {
@@ -64,8 +64,8 @@ var getWeather = function () {
       imgEl.src =
         "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png";
 
-      var iconEl = document.querySelector("#icon");
-      iconEl.textContent = data.weather[0].icon;
+      var currentCityIconEl = document.querySelector("#icon");
+      currentCityIconEl.textContent = data.weather[0].icon;
 
       // Add image description for screen readers and apply to img "description"
 
@@ -73,7 +73,7 @@ var getWeather = function () {
       iconDescriptionEl.textContent = data.weather[0].description;
 
       currentCityEl.appendChild(imgEl);
-      currentCityEl.appendChild(iconEl);
+      currentCityEl.appendChild(currentCityIconEl);
       currentDateEl.appendChild(iconDescriptionEl);
 
       // Add API for UV Index referencing latitude and longitude from "coord" of previous API
@@ -151,8 +151,8 @@ var getWeather = function () {
           iconDay1DescriptionEl.textContent =
             data.daily[1].weather[0].description;
 
-          var iconDay1 = document.querySelector("#iconDay1");
-          iconEl.textContent = data.daily[1].weather[0].icon;
+          var iconDay1El = document.querySelector("#iconDay1");
+          iconDay1El.textContent = data.daily[1].weather[0].icon;
 
           // Day 1 "temp"
           var tempDay1El = document.querySelector("#tempDay1");
@@ -325,5 +325,27 @@ var getWeather = function () {
     });
   });
 };
+
+var saveInput = function(){
+    console.log(cityInputEl.value);
+    localStorage.setItem("city", cityInputEl.value);
+    createHistory(cityInputEl.value);
+}
+
+var createHistory = function (currentCityName){
+    console.log("test");
+var searchHistoryEl = document.querySelector("#Search-History");
+console.log("search", searchHistoryEl);
+ var createButtonEl = document.createElement("button");
+ console.log("button", createButtonEl);
+
+createButtonEl.className = "button";
+createButtonEl.textContent = currentCityName;
+console.log(currentCityName);
+
+searchHistoryEl.appendChild(createButtonEl);
+console.log(createButtonEl);
+// }
+}
 
 userFormEl.addEventListener("submit", formSubmitHandler);
