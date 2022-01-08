@@ -1,6 +1,6 @@
 var userFormEl = document.querySelector("#user-form");
 var cityInputEl = document.querySelector("#textfield");
-var savedCities = ['Minneapolis'];
+var savedCities = [];
 // console.log("see", savedCities);
 // When a user types in a city in form input, API generates "Current City" on right side of screen; search also gets added to search history.
 
@@ -15,25 +15,35 @@ var savedCities = ['Minneapolis'];
 
 var formSubmitHandler = function (event) {
   event.preventDefault();
+  
   // get value from input element
   var currentCityName = cityInputEl.value.trim();
 
+  savedCities.push(currentCityName);
+  
+  if (savedCities.length > 8){
+    savedCities.shift(1);
+  }
+
+var savedCitiesString = JSON.stringify(savedCities);
+
+localStorage.setItem("cities", savedCitiesString);
+
   if (currentCityName) {
     getWeather(currentCityName);
-    saveInput();
+    createHistory(currentCityName);
+
     // fiveDayForecast(currentCityName);
     cityInputEl.value = "";
-  } else if (!currentCityName === false) {
+  } else if (!currentCityName) {
     alert("Please check the spelling of your city and try again.");
   }
 };
 
-var getWeather = function () {
+var getWeather = function (cityName) {
   // OpenWeather API formatted to fetch any city
-  var currentCityName = cityInputEl.value.trim();
-  var apiUrl =
-    "https://api.openweathermap.org/data/2.5/weather?q=" +
-    currentCityName +
+  var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" +
+    cityName +
     "&units=imperial&appid=24b908f651171bcc6920a65894cdfb4a";
 
   fetch(apiUrl).then(function (response) {
@@ -82,6 +92,8 @@ var getWeather = function () {
 
           var currentCityIconEl = document.querySelector("#icon");
           currentCityIconEl.textContent = data.weather[0].icon;
+          // console.log(currentCityIconEl);
+          // console.log(data.weather[0].icon);
 
           // Add image description for screen readers and apply to img "description"
 
@@ -145,7 +157,7 @@ var getWeather = function () {
           // Use forecast to fetch and display data for 5 Day forecast on html
           fetch(forecast).then(function (response) {
             response.json().then(function (data) {
-              console.log(data);
+              // console.log(data);
               // Display five day forecast ids for "date"
 
               // Day 1 Date
@@ -347,27 +359,27 @@ var getWeather = function () {
         })
         // .catch(function (error) {
         //   // from initial API fetch
-        //   alert("Unable to connect to OpenWeather API");
+        //   alert(error.message);
         // });
     }
   });
 };
 
-var saveInput = function () {
-  console.log(cityInputEl.value);
+// var saveInput = function () {
+//   console.log(cityInputEl.value);
 
-  var savedCities = localStorage.setItem("city", cityInputEl.value);
-  var savedCitiesArray = localStorage.getItem(savedCities);
+//   localStorage.setItem("city", cityInputEl.value);
 
-  if (!savedCitiesArray){
-    savedCitiesArray = [];
-  } savedCitiesArray.push(cityInputEl);
 
-  var updateCities = localStorage.setItem("city", cityInputEl.value);
+//   if (!savedCitiesArray){
+//     savedCitiesArray = [];
+//   } savedCitiesArray.push(cityInputEl);
+
+//   var updateCities = localStorage.setItem("city", cityInputEl.value);
   
-  createHistory(cityInputEl.value);
+//   createHistory(cityInputEl.value);
 
-};
+// };
 
 
 var createHistory = function (currentCityName) {
@@ -385,6 +397,17 @@ var createHistory = function (currentCityName) {
   // console.log(createButtonEl);
   // }
 };
+
+var loadSavedItems = function(){
+  savedCities = JSON.parse(localStorage.getItem("cities"));
+  for (i=0; i< savedCities.length; i++){
+    createHistory(savedCities[i]);
+  }
+  // console.log(savedCities[savedCities.length-1]);
+  getWeather(savedCities[savedCities.length-1]);
+}
+
+loadSavedItems();
 
 function historyBtnFetchCurrentWeather(){
   var savedCitiesHistory = document.querySelector(".button");
