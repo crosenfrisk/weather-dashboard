@@ -1,5 +1,6 @@
 var userFormEl = document.querySelector("#user-form");
 var cityInputEl = document.querySelector("#textfield");
+var apiKey = "ed5ce538bac014e73b5896ae5b428b2f";
 var savedCities = [];
 
 // When a user types in a city in form input, API generates "Current City" on right side of screen; search also gets added to search history.
@@ -18,8 +19,8 @@ var formSubmitHandler = function (event) {
 
    // Set condition for max length of array. If greater than set size, remove oldest record [0]
     if (savedCities && savedCities.length > 8) {
-      var el = document.getElementById(savedCities[0]);
-      el.remove(); // Removes the button with the city name
+      // var el = document.getElementById(savedCities[0]);
+      // el.remove(); // Removes the button with the city name
   
       savedCities.shift(1);
     }
@@ -44,7 +45,7 @@ var getWeather = function (cityName) {
   var apiUrl =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
     cityName +
-    "&units=imperial&appid=24b908f651171bcc6920a65894cdfb4a";
+    "&units=imperial&appid=" + apiKey;
 
   fetch(apiUrl).then(function (response) {
     // request was successful
@@ -97,7 +98,7 @@ var getWeather = function (cityName) {
           lat +
           "&lon=" +
           lon +
-          "&units=imperial&exclude=hourly,daily&appid=24b908f651171bcc6920a65894cdfb4a";
+          "&units=imperial&exclude=hourly,daily&appid=" + apiKey;
 
         // Use additionalData to fetch and return data for current UV index, and display on html
         fetch(additionalData).then(function (response) {
@@ -127,7 +128,7 @@ var getWeather = function (cityName) {
           lat +
           "&lon=" +
           lon +
-          "&units=imperial&exclude=minutely,hourly,alerts&include=daily.dt&cnt=5&appid=24b908f651171bcc6920a65894cdfb4a";
+          "&units=imperial&exclude=minutely,hourly,alerts&include=daily.dt&cnt=5&appid="+ apiKey;
 
         // Use forecast to fetch and display data for 5 Day forecast on html
         fetch(forecast).then(function (response) {
@@ -368,7 +369,7 @@ var loadSavedItems = function (cityName) {
   }
 };
 
-// loadSavedItems();
+loadSavedItems();
 
 
 userFormEl.addEventListener("submit", formSubmitHandler);
