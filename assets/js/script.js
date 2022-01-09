@@ -22,8 +22,11 @@ var formSubmitHandler = function (event) {
   // Save cities to local storage
   localStorage.setItem("cities", savedCitiesString);
 
+  // // Max length to savedCities[]
+  // savedCities.length = 7;
+
   // Set condition for max length of array. If greater than set size, remove oldest record [0]
-  if (savedCities && savedCities.length > 8) {
+  if (savedCities && savedCities.length > 7) {
     savedCities.shift(1);
   }
 
@@ -340,6 +343,15 @@ var createHistory = function (currentCityName) {
   createButtonEl.textContent = currentCityName;
 
   searchHistoryEl.appendChild(createButtonEl);
+
+  // Event listener for each button created
+  createButtonEl.addEventListener("click", function(){
+    // Reset input value if filled
+    cityInputEl.value = "";
+    cityInputEl.setAttribute("placeholder", currentCityName);
+    // When city button is clicked
+    getWeather(currentCityName);
+  })
 };
 
 var loadSavedItems = function (cityName) {
@@ -357,9 +369,5 @@ var loadSavedItems = function (cityName) {
 
 loadSavedItems();
 
-function historyBtnFetchCurrentWeather() {
-  var savedCitiesHistory = document.querySelector(".button");
-  // do API fetch using city name input from saved item (is this a getItem from local storage situation?)
-}
 
 userFormEl.addEventListener("submit", formSubmitHandler);
