@@ -1,37 +1,35 @@
 var userFormEl = document.querySelector("#user-form");
 var cityInputEl = document.querySelector("#textfield");
 var savedCities = [];
-// console.log("see", savedCities);
+
 // When a user types in a city in form input, API generates "Current City" on right side of screen; search also gets added to search history.
-
-// var defaultCityData = function (event){
-//   getWeather(savedCities);
-//   console.log(getWeather(savedCities));
-// }
-
-// var addNameToSavedCities = function(){
-//   cityInputEl.push(savedCities);
-// }
 
 var formSubmitHandler = function (event) {
   event.preventDefault();
-  
-  // get value from input element
+
+  // Get value from input element
   var currentCityName = cityInputEl.value.trim();
 
+   // Save input into savedCities array, but only if it doesn't already exist
+if (currentCityName && !savedCities.includes(currentCityName)){
   savedCities.push(currentCityName);
-  
-  if (savedCities.length > 8){
+  createHistory(currentCityName);
+}
+
+  // Convert savedCities into an string for local storage
+  var savedCitiesString = JSON.stringify(savedCities);
+
+  // Save cities to local storage
+  localStorage.setItem("cities", savedCitiesString);
+
+  // Set condition for max length of array. If greater than set size, remove oldest record [0]
+  if ( savedCities && savedCities.length > 8) {
     savedCities.shift(1);
   }
 
-var savedCitiesString = JSON.stringify(savedCities);
-
-localStorage.setItem("cities", savedCitiesString);
-
   if (currentCityName) {
     getWeather(currentCityName);
-    createHistory(currentCityName);
+   ;
 
     // fiveDayForecast(currentCityName);
     cityInputEl.value = "";
@@ -42,7 +40,8 @@ localStorage.setItem("cities", savedCitiesString);
 
 var getWeather = function (cityName) {
   // OpenWeather API formatted to fetch any city
-  var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" +
+  var apiUrl =
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
     cityName +
     "&units=imperial&appid=24b908f651171bcc6920a65894cdfb4a";
 
@@ -52,12 +51,9 @@ var getWeather = function (cityName) {
       response
         .json()
         .then(function (data) {
-          // console.log(data.name);
-          //  console.log(data);
 
           var divEl = document.querySelector("#Current-City");
           var currentCityEl = document.querySelector("#update-name");
-
           // Take input from user to return current city from API.
           currentCityEl.textContent = data.name;
 
@@ -89,21 +85,11 @@ var getWeather = function (cityName) {
             "http://openweathermap.org/img/wn/" +
             data.weather[0].icon +
             "@2x.png";
-
-          var currentCityIconEl = document.querySelector("#icon");
-          currentCityIconEl.textContent = data.weather[0].icon;
-          // console.log(currentCityIconEl);
-          // console.log(data.weather[0].icon);
-
+            currentCityEl.appendChild(imgEl);
+            
           // Add image description for screen readers and apply to img "description"
-
-          var iconDescriptionEl = document.querySelector(".description");
-          iconDescriptionEl.textContent = data.weather[0].description;
-
-          currentCityEl.appendChild(imgEl);
-          currentCityEl.appendChild(currentCityIconEl);
-          currentDateEl.appendChild(iconDescriptionEl);
-
+            imgEl.setAttribute("alt", data.weather[0].description)
+            
           // Add API for UV Index referencing latitude and longitude from "coord" of previous API
           var lat = data.coord.lat;
           var lon = data.coord.lon;
@@ -146,7 +132,6 @@ var getWeather = function (cityName) {
           });
 
           // OpenWeather API for 5 Day forecast, formatted to fetch any city
-
           var forecast =
             "https://api.openweathermap.org/data/2.5/onecall?lat=" +
             lat +
@@ -157,7 +142,6 @@ var getWeather = function (cityName) {
           // Use forecast to fetch and display data for 5 Day forecast on html
           fetch(forecast).then(function (response) {
             response.json().then(function (data) {
-              // console.log(data);
               // Display five day forecast ids for "date"
 
               // Day 1 Date
@@ -365,55 +349,35 @@ var getWeather = function (cityName) {
   });
 };
 
-// var saveInput = function () {
-//   console.log(cityInputEl.value);
-
-//   localStorage.setItem("city", cityInputEl.value);
-
-
-//   if (!savedCitiesArray){
-//     savedCitiesArray = [];
-//   } savedCitiesArray.push(cityInputEl);
-
-//   var updateCities = localStorage.setItem("city", cityInputEl.value);
-  
-//   createHistory(cityInputEl.value);
-
-// };
-
-
 var createHistory = function (currentCityName) {
-  // console.log("test");
   var searchHistoryEl = document.querySelector("#Search-History");
-  // console.log("search", searchHistoryEl);
+
   var createButtonEl = document.createElement("button");
-  // console.log("button", createButtonEl);
 
   createButtonEl.className = "button";
   createButtonEl.textContent = currentCityName;
-  // console.log(currentCityName);
 
   searchHistoryEl.appendChild(createButtonEl);
-  // console.log(createButtonEl);
-  // }
 };
 
-var loadSavedItems = function(){
+var loadSavedItems = function (cityName) {
   savedCities = JSON.parse(localStorage.getItem("cities"));
-  for (i=0; i< savedCities.length; i++){
+
+  if (savedCities){
+  for (var i = 0; i < savedCities.length; i++) {
     createHistory(savedCities[i]);
   }
-  // console.log(savedCities[savedCities.length-1]);
-  getWeather(savedCities[savedCities.length-1]);
+  getWeather(savedCities[savedCities.length - 1]);
+}else {
+  savedCities = []
 }
+};
 
 loadSavedItems();
 
-function historyBtnFetchCurrentWeather(){
+function historyBtnFetchCurrentWeather() {
   var savedCitiesHistory = document.querySelector(".button");
   // do API fetch using city name input from saved item (is this a getItem from local storage situation?)
-  
 }
-
 
 userFormEl.addEventListener("submit", formSubmitHandler);
