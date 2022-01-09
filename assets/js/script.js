@@ -16,19 +16,19 @@ var formSubmitHandler = function (event) {
     createHistory(currentCityName);
   }
 
+   // Set condition for max length of array. If greater than set size, remove oldest record [0]
+    if (savedCities && savedCities.length > 8) {
+      var el = document.getElementById(savedCities[0]);
+      el.remove(); // Removes the button with the city name
+  
+      savedCities.shift(1);
+    }
+
   // Convert savedCities into an string for local storage
   var savedCitiesString = JSON.stringify(savedCities);
 
   // Save cities to local storage
-  localStorage.setItem("cities", savedCitiesString);
-
-  // // Max length to savedCities[]
-  // savedCities.length = 7;
-
-  // Set condition for max length of array. If greater than set size, remove oldest record [0]
-  if (savedCities && savedCities.length > 7) {
-    savedCities.shift(1);
-  }
+  localStorage.setItem("cities", savedCitiesString); 
 
   if (currentCityName) {
     getWeather(currentCityName);
@@ -341,6 +341,7 @@ var createHistory = function (currentCityName) {
 
   createButtonEl.className = "button";
   createButtonEl.textContent = currentCityName;
+  createButtonEl.id = currentCityName;
 
   searchHistoryEl.appendChild(createButtonEl);
 
@@ -367,7 +368,7 @@ var loadSavedItems = function (cityName) {
   }
 };
 
-loadSavedItems();
+// loadSavedItems();
 
 
 userFormEl.addEventListener("submit", formSubmitHandler);
